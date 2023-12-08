@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Events, Message } from "discord.js";
 import BaseClient from "../lib/BaseClient";
 import { CommandPermissionLevel } from "../lib/BaseCommand";
 import BaseEvent from "../lib/BaseEvent";
@@ -6,7 +6,7 @@ import BaseEvent from "../lib/BaseEvent";
 export default class extends BaseEvent {
     constructor(public readonly client: BaseClient) {
         super({
-            event: "messageCreate",
+            event: Events.MessageCreate,
             once: false,
         });
     }

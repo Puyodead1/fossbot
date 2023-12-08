@@ -5,9 +5,9 @@ import BaseCommand, { CommandPermissionLevel } from "../lib/BaseCommand";
 export default class extends BaseCommand {
     constructor(public readonly client: BaseClient) {
         super({
-            name: "lockchannel",
-            description: "Locks the current channel.",
-            aliases: ["lc", "lockc", "lock", "lockchan"],
+            name: "unlockchannel",
+            description: "Unlocks the current channel.",
+            aliases: ["ulc", "unlockc", "unlock", "unlockchan"],
             guildOnly: true,
             permissionLevel: CommandPermissionLevel.Moderator,
         });
@@ -19,9 +19,9 @@ export default class extends BaseCommand {
 
         const perms = channel.permissionOverwrites.cache.get(msg.guild!.id);
         if (!perms) return await msg.channel.send("Couldn't get permission overwrites for channel.");
-        if (perms.deny.has("SendMessages")) {
+        if (perms.allow.has("SendMessages")) {
             const embed = new EmbedBuilder()
-                .setDescription(`🤔 Channel is already locked`)
+                .setDescription(`🤔 Channel is not locked`)
                 .setColor("Red")
                 .setTimestamp()
                 .setFooter({
@@ -32,10 +32,10 @@ export default class extends BaseCommand {
                 embeds: [embed],
             });
         }
-        await channel.permissionOverwrites.edit(msg.guild!.roles.everyone, { SendMessages: false });
+        await channel.permissionOverwrites.edit(msg.guild!.roles.everyone, { SendMessages: true });
 
         const embed = new EmbedBuilder()
-            .setDescription(`🔒 Locked channel <#${channel.id}>`)
+            .setDescription(`🔓 Unlocked channel <#${channel.id}>`)
             .setColor("Red")
             .setTimestamp()
             .setFooter({
