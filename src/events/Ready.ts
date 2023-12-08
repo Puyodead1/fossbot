@@ -1,15 +1,15 @@
-import { Client } from "@puyodead1/fosscord-gopnik/build/lib";
+import BaseClient from "../lib/BaseClient";
 import BaseEvent from "../lib/BaseEvent";
 
 export default class extends BaseEvent {
-  constructor(public readonly client: Client) {
-    super({
-      event: "ready",
-      once: true,
-    });
-  }
+    constructor(public readonly client: BaseClient) {
+        super({
+            event: "ready",
+            once: true,
+        });
+    }
 
-  public async execute(): Promise<void> {
-    console.log(`Logged in as ${this.client.user?.tag}`);
-  }
+    public async execute(): Promise<void> {
+        console.log(`Logged in as ${this.client.user?.tag}`);
+    }
 }

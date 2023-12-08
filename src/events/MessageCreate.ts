@@ -1,29 +1,61 @@
-import { Client } from "@puyodead1/fosscord-gopnik/build/lib";
 import { Message } from "discord.js";
+import BaseClient from "../lib/BaseClient";
+import { CommandPermissionLevel } from "../lib/BaseCommand";
 import BaseEvent from "../lib/BaseEvent";
 
 export default class extends BaseEvent {
-  constructor(public readonly client: Client) {
-    super({
-      event: "messageCreate",
-      once: false,
-    });
-  }
+    constructor(public readonly client: BaseClient) {
+        super({
+            event: "messageCreate",
+            once: false,
+        });
+    }
 
-  public async execute(msg: Message): Promise<any> {
-    if (msg.author.bot) return; // ignore bots
-    if (!msg.content) return;
-    //if (msg.author.id === client.user?.id) return; // ignore self
-    if (!msg.content.toLowerCase().startsWith("a!")) return;
+    public async execute(msg: Message): Promise<any> {
+        if (msg.author.bot) return; // ignore bots
+        if (!msg.content) return;
+        if (msg.author.id === this.client.user?.id) return; // ignore self
+        if (!msg.content.toLowerCase().startsWith("a!")) return;
 
-    const a = msg.content.slice(2);
-    const args = a.match(/\w+|"(?:\\"|[^"])+"/g);
-    if (!args) return;
-    const command = args.shift()?.toLowerCase();
+        const a = msg.content.slice(2);
+        const args = a.split(/ +/g);
+        const command = args.shift()?.toLowerCase();
 
-    if (!command) return;
+        if (!command) return;
 
-    // TODO: match command to a command class and execute it
-    await msg.reply(`cmd: ${command}; args: ${args.join(", ")}`);
-  }
+        const cmd = this.client.commands.get(command);
+        if (!cmd) return;
+
+        if (cmd.options.guildOnly && !msg.guild) return;
+
+        const pl = cmd.options.permissionLevel ?? CommandPermissionLevel.Everyone;
+
+        let canExecute = false;
+
+        switch (pl) {
+            case CommandPermissionLevel.Everyone:
+                canExecute = true;
+                break;
+            case CommandPermissionLevel.Moderator:
+                canExecute = msg.member?.permissions.has("ManageMessages") ?? false;
+                break;
+            case CommandPermissionLevel.Administrator:
+                canExecute = msg.member?.permissions.has("Administrator") ?? false;
+                break;
+            case CommandPermissionLevel.ServerOwner:
+                canExecute = msg.guild?.ownerId === msg.author.id;
+                break;
+            case CommandPermissionLevel.BotOwner:
+                canExecute = this.client.config.ownerIds.includes(msg.author.id);
+                break;
+        }
+
+        if (canExecute) {
+            console.debug(`${msg.author.tag} executed command '${command}' with args '${args}'`);
+            await cmd.execute(msg, args);
+        } else {
+            console.debug(`${msg.author.tag} tried to execute command '${command}' with args '${args}' but was denied`);
+            await msg.channel.send("You do not have permission to execute this command.");
+        }
+    }
 }
