@@ -12,8 +12,7 @@ export default class extends BaseCommand {
     }
     public async execute(msg: Message, args: string[]): Promise<any> {
         if (!msg.channel.isTextBased()) return;
-        if (!args.length) return await msg.channel.send("user?");
-        // const id = args[0];
+        if (!args.length) return await msg.channel.send("purge <user|count> [args]");
         const type = args[0]; // user, count, all
         args = args.slice(1);
 
@@ -24,39 +23,6 @@ export default class extends BaseCommand {
         } else {
             return await msg.channel.send("purge <user|count> [args]");
         }
-
-        // const user = await this.client.users.fetch(id);
-        // if (!user) return await msg.channel.send("user not found");
-
-        // let channelId = msg.channelId;
-        // if (args[1]) channelId = args[1];
-
-        // let channel;
-        // if (channelId === msg.channelId) channel = msg.channel;
-        // else channel = await msg.guild?.channels.fetch(channelId);
-
-        // if (!channel || !channel.isTextBased()) return await msg.channel.send("channel not found or invalid");
-
-        // let i = 0;
-        // let messages: Message[] = [];
-        // while (messages.length == 0 || i < 10) {
-        //     console.log(`Fetching ${i}`);
-        //     const a = await channel.messages.fetch({
-        //         limit: 100,
-        //         before: messages[messages.length - 1]?.id,
-        //     });
-        //     if (!a.size) break;
-        //     messages = messages.concat(Array.from(a.values()));
-        //     i++;
-        // }
-        // if (!messages.length) return await msg.channel.send("no messages found");
-        // const userMessages = messages.filter((m) => m.author.id === user.id);
-        // console.log(`Found ${userMessages.length} messages from ${user.tag}`);
-        // for (const message of userMessages.values()) {
-        //     await message.delete();
-        // }
-
-        // await msg.channel.send(`Deleted ${userMessages.length} messages from ${user.tag}, i think`);
     }
 
     async purgeUser(msg: Message, args: string[]): Promise<any> {
