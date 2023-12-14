@@ -17,8 +17,8 @@ export default abstract class {
 
 export const enum CommandPermissionLevel {
     Everyone = 0,
-    Moderator = 5,
-    Administrator = 6,
-    ServerOwner = 7,
-    BotOwner = 10,
+    Moderator = 1,
+    Administrator = 2,
+    ServerOwner = 3,
+    BotOwner = 4,
 }

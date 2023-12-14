@@ -12,6 +12,9 @@ const client = new BaseClient({
         cdn: "https://cdn.old.server.spacebar.chat",
         version: "9",
     },
+    config: {
+        prefix: process.env.PREFIX,
+    },
 });
 
 const eventsPath = path.join(__dirname, "events");
@@ -45,4 +48,13 @@ for (const file of commandFiles) {
     console.log(`[Command Load] Loaded command ${cmdInstance.options.name}!`);
 }
 
-client.login(process.env.TOKEN);
+client.db
+    .sync({ force: true })
+    .then(async () => {
+        console.log("Database synced, starting bot");
+        await client.login(process.env.TOKEN);
+    })
+    .catch((e) => {
+        console.error(e);
+        process.exit(1);
+    });
