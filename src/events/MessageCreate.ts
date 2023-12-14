@@ -15,7 +15,11 @@ export default class extends BaseEvent {
         if (msg.author.bot) return; // ignore bots
         if (!msg.content) return;
         if (msg.author.id === this.client.user?.id) return; // ignore self
-        if (!msg.content.toLowerCase().startsWith("a!")) return;
+        if (!msg.content.toLowerCase().startsWith(this.client.config.prefix!)) {
+            // automoderation
+            await this.client.antispam.execute(msg);
+            return;
+        }
 
         const a = msg.content.slice(2);
         const args = a.split(/ +/g);
@@ -46,7 +50,7 @@ export default class extends BaseEvent {
                 canExecute = msg.guild?.ownerId === msg.author.id;
                 break;
             case CommandPermissionLevel.BotOwner:
-                canExecute = this.client.config.ownerIds.includes(msg.author.id);
+                canExecute = this.client.config.ownerIds!.includes(msg.author.id);
                 break;
         }
 
