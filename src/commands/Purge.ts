@@ -13,15 +13,15 @@ export default class extends BaseCommand {
     public async execute(msg: Message, args: string[]): Promise<any> {
         if (!msg.channel.isTextBased()) return;
         if (!args.length) return await msg.channel.send("purge <user|count> [args]");
-        const type = args[0]; // user, count, all
+        const action = args[0]; // user, count, all
         args = args.slice(1);
 
-        if (type.toLowerCase() === "user") {
+        if (action.toLowerCase() === "user") {
             return await this.purgeUser(msg, args);
-        } else if (type.toLowerCase() === "count") {
+        } else if (action.toLowerCase() === "count") {
             return await this.purgeCount(msg, args);
         } else {
-            return await msg.channel.send("purge <user|count> [args]");
+            return await msg.channel.send("Invalid Action. purge <user|count> [args]");
         }
     }
 
