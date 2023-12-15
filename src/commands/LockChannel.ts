@@ -14,7 +14,7 @@ export default class extends BaseCommand {
     }
     public async execute(msg: Message, args: string[]): Promise<any> {
         const channelId = args.length ? args[0] : msg.channel.id;
-        const channel = msg.guild?.channels.cache.get(channelId);
+        const channel = await msg.guild?.channels.fetch(channelId);
         if (!channel || !("permissionOverwrites" in channel)) return await msg.channel.send("Invalid channel.");
 
         const perms = channel.permissionOverwrites.cache.get(msg.guild!.id);
