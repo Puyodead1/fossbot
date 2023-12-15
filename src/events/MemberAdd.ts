@@ -12,8 +12,8 @@ export default class extends BaseEvent {
 
     public async execute(member: GuildMember): Promise<void> {
         // TODO: get welcome channel from database
-        const channel = await member.guild.channels.fetch("1006649184062836783");
-        if (!channel || !channel.isTextBased()) return;
-        await channel.send(`\`${member.user.tag}\` (\`${member.user.id}\`) has joined the party.`);
+        // const channel = await member.guild.channels.fetch("1006649184062836783");
+        // if (!channel || !channel.isTextBased()) return;
+        // await channel.send(`\`${member.user.tag}\` (\`${member.user.id}\`) has joined the party.`);
     }
 }
