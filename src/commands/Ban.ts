@@ -29,6 +29,6 @@ export default class extends BaseCommand {
             reason,
             deleteMessageSeconds: 604800, // TODO: this doesnt do anything in spacebar yet
         });
-        return await msg.channel.send(`OK, I Banned ${member.user.username}'s ass`);
+        return await msg.channel.send(`\`${member.user.tag}\` (\`${member.user.id}\`) has been banned.`);
     }
 }

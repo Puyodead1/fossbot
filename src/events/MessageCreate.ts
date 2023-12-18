@@ -56,7 +56,12 @@ export default class extends BaseEvent {
 
         if (canExecute) {
             console.debug(`${msg.author.tag} executed command '${command}' with args '${args}'`);
-            await cmd.execute(msg, args);
+            try {
+                await cmd.execute(msg, args);
+            } catch (e) {
+                console.error(e);
+                await msg.channel.send(`An error occurred while executing this command. ${e}`);
+            }
         } else {
             console.debug(`${msg.author.tag} tried to execute command '${command}' with args '${args}' but was denied`);
             await msg.channel.send("You do not have permission to execute this command.");

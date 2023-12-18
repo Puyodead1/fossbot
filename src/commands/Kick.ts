@@ -26,6 +26,6 @@ export default class extends BaseCommand {
         // anything after the first arg is the reason
         const reason = args.slice(1).join(" ") || "No reason provided";
         await member.kick(reason);
-        return await msg.channel.send(`OK, I Kicked ${member.user.username}'s ass`);
+        return await msg.channel.send(`\`${member.user.tag}\` (\`${member.user.id}\`) has been kicked.`);
     }
 }
