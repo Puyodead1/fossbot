@@ -8,8 +8,10 @@ import BaseEvent from "./lib/BaseEvent";
 const client = new BaseClient({
     intents: [],
     rest: {
-        api: "https://api.old.server.spacebar.chat/api",
-        cdn: "https://cdn.old.server.spacebar.chat",
+        // api: "https://api.old.server.spacebar.chat/api",
+        // cdn: "https://cdn.old.server.spacebar.chat",
+        api: "http://localhost:3001/api",
+        cdn: "http://localhost:3001",
         version: "9",
     },
     config: {

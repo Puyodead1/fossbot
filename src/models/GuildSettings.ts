@@ -4,6 +4,7 @@ export interface GuildSettings {
     automod: {
         exemptRoles: string[];
         exemptUsers: string[];
+        enabled: boolean;
     };
     roles: {
         mute: string | null;
@@ -36,6 +37,7 @@ export const DefaultSettings: GuildSettings = {
     automod: {
         exemptRoles: [],
         exemptUsers: [],
+        enabled: false,
     },
     roles: {
         mute: null,
