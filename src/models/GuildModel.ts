@@ -21,7 +21,7 @@ export type GuildAttributes = InferType<typeof GuildSchema>;
 export default class Guild extends Model<GuildAttributes & { id: string }, GuildAttributes & { id: string }> {
     @Column({
         type: DataType.STRING,
-        defaultValue: "b!",
+        defaultValue: "a!",
     })
     declare prefix: string;
 
