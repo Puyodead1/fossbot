@@ -11,7 +11,7 @@ export default class extends BaseCommand {
         super({
             name: "settings",
             guildOnly: true,
-            permissionLevel: CommandPermissionLevel.Administrator,
+            permissionLevel: CommandPermissionLevel.Moderator,
             aliases: ["config", "cfg", "⚙️"],
         });
     }
