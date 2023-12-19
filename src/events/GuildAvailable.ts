@@ -6,13 +6,13 @@ import GuildModel, { GuildSchema } from "../models/GuildModel";
 export default class extends BaseEvent {
     constructor(public readonly client: BaseClient) {
         super({
-            event: Events.GuildCreate,
+            event: Events.GuildAvailable,
             once: false,
         });
     }
 
     public async execute(guild: Guild): Promise<void> {
-        console.debug(`[GuildCreate] Recieved GuildCreate for ${guild.id}`);
+        console.debug(`[GuildAvailable] Recieved GuildAvailable for ${guild.id}`);
 
         const record = await GuildModel.findByPk(guild.id);
         if (record) return;

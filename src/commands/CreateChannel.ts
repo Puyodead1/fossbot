@@ -19,7 +19,7 @@ export default class extends BaseCommand {
         const position = args[2] ? Number(args[2]) : undefined;
         const parent = args[3] ? msg.guild!.channels.cache.get(args[3]) : undefined;
 
-        if (!parent || parent.type !== ChannelType.GuildCategory)
+        if (parent !== undefined && parent.type !== ChannelType.GuildCategory)
             return await msg.channel.send("Invalid parent channel.");
 
         // if type is a string, try and convert it to a number

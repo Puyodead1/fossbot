@@ -2,7 +2,7 @@ import { Events, Message } from "discord.js";
 import BaseClient from "../lib/BaseClient";
 import { CommandPermissionLevel } from "../lib/BaseCommand";
 import BaseEvent from "../lib/BaseEvent";
-import { GuildSettings } from "../models/GuildSettings";
+import GuildModel from "../models/GuildModel";
 
 export default class extends BaseEvent {
     constructor(public readonly client: BaseClient) {
@@ -17,17 +17,20 @@ export default class extends BaseEvent {
         if (!msg.content) return;
         if (!msg.guild) return; // ignore DMs
         if (msg.author.id === this.client.user?.id) return; // ignore self
-        if (!msg.content.toLowerCase().startsWith(this.client.config.prefix!)) {
+        const guildRecord = await GuildModel.findByPk(msg.guild.id);
+        const prefix = guildRecord?.getDataValue("prefix") ?? this.client.config.prefix!;
+        if (!msg.content.toLowerCase().startsWith(prefix)) {
             // automoderation
-            const guild = await this.client.db.Guild.findOne({ where: { id: msg.guild!.id } });
-            const automod = guild?.get("automod") as GuildSettings["automod"];
-            console.log(automod);
-            if (!automod || !automod.enabled) return;
-            await this.client.antispam.execute(msg);
+
+            // general automod toggle
+            if (!guildRecord?.automod_enabled) return;
+
+            // antispam toggle
+            if (guildRecord?.automod_antispam_enabled) await this.client.antispam.execute(msg, guildRecord);
             return;
         }
 
-        const a = msg.content.slice(2);
+        const a = msg.content.slice(prefix.length);
         const args = a.split(/ +/g);
         const command = args.shift()?.toLowerCase();
 

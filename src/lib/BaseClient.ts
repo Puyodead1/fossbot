@@ -1,7 +1,7 @@
 import { Client, ClientOptions } from "discord.js";
-import Sequelize, { Model, ModelStatic } from "sequelize";
+import { Sequelize } from "sequelize-typescript";
 import AntiSpam from "../automod/AntiSpam";
-import GuildSettings from "../models/GuildSettings";
+import GuildModel from "../models/GuildModel";
 import BaseCommand from "./BaseCommand";
 
 export interface Config {
@@ -21,7 +21,7 @@ export interface CustomClientOptions extends ClientOptions {
 }
 
 export default class BaseClient extends Client {
-    public readonly db: Sequelize.Sequelize;
+    public readonly db: Sequelize;
     public readonly commands: Map<string, BaseCommand>;
     public readonly config: Config;
     public readonly antispam: AntiSpam;
@@ -29,22 +29,15 @@ export default class BaseClient extends Client {
     constructor(options: CustomClientOptions) {
         super(options);
         this.config = { ...defaultConfig, ...options.config };
-        this.db = new Sequelize.Sequelize("database", "user", "password", {
+        this.db = new Sequelize("database", "user", "password", {
             host: "localhost",
             dialect: "sqlite",
             logging: false,
             // SQLite only
             storage: "database.sqlite",
+            models: [GuildModel],
         });
-        this.db.Guild = GuildSettings(this.db);
         this.commands = new Map();
         this.antispam = new AntiSpam(this);
-    }
-}
-
-// add Guild proerty to Sequelize
-declare module "sequelize" {
-    export interface Sequelize {
-        Guild: ModelStatic<Model<any, any>>;
     }
 }
