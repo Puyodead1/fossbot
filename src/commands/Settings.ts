@@ -24,24 +24,24 @@ export default class extends BaseCommand {
         if (!subcmd) return await msg.channel.send("No subcommand provided. Valid subcommands: `get`, `set`");
 
         if (subcmd === "get") {
-            const key = args.shift()?.toLowerCase();
+            const key = args.shift();
             if (!key)
                 return await msg.channel.send(
                     `No config key provided. Valid keys: \`${GuildSchemaKeys.join("`, `")}\``
                 );
             // check if key is valid
-            if (!GuildSchemaKeys.includes(key.toLowerCase())) return await msg.channel.send("invalid key");
+            if (!GuildSchemaKeys.includes(key)) return await msg.channel.send("invalid key");
 
             const value = guildRecord.get(key);
             return await msg.channel.send(`\`${key}\` = \`${value}\``);
         } else if (subcmd === "set") {
-            const key = args.shift()?.toLowerCase();
+            const key = args.shift();
             if (!key)
                 return await msg.channel.send(
                     `No config key provided. Valid keys: \`${GuildSchemaKeys.join("`, `")}\``
                 );
             // check if key is valid
-            if (!GuildSchemaKeys.includes(key.toLowerCase())) return await msg.channel.send("invalid key");
+            if (!GuildSchemaKeys.includes(key)) return await msg.channel.send("invalid key");
             const value = args.join(" ");
 
             if (!value) return await msg.channel.send(`No value provided. Should be of type: \`${keyTypes[key]}\``);
