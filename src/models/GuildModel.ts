@@ -2,7 +2,7 @@ import { Column, DataType, Model, Table } from "sequelize-typescript";
 import { InferType, boolean, number, object, string } from "yup";
 
 export const GuildSchema = object({
-    prefix: string().default("b!"),
+    prefix: string().default("a!"),
     automod_enabled: boolean().default(false),
     automod_antispam_enabled: boolean().default(false),
     automod_antispam_warnThreshold: number().default(3),
