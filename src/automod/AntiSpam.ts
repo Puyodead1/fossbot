@@ -94,7 +94,7 @@ export default class AntiSpam {
                     const logChannel = await msg.guild.channels.fetch(logsChannelId);
                     if (logChannel && logChannel.isTextBased()) {
                         await logChannel.send(
-                            `**${msg.author.tag}** (${msg.author.id}) has been banned for spamming (${cached.length} messages in ${duration}ms)`
+                            `\`${msg.author.tag}\` (\`${msg.author.id}\`) has been banned for spamming (\`${cached.length}\` messages in \`${duration}ms\`)`
                         );
                     }
                 }

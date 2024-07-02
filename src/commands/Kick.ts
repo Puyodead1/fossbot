@@ -1,6 +1,7 @@
 import { Message } from "discord.js";
 import BaseClient from "../lib/BaseClient";
 import BaseCommand, { CommandPermissionLevel } from "../lib/BaseCommand";
+import GuildModel from "../models/GuildModel";
 
 export default class extends BaseCommand {
     constructor(public readonly client: BaseClient) {
@@ -26,6 +27,19 @@ export default class extends BaseCommand {
         // anything after the first arg is the reason
         const reason = args.slice(1).join(" ") || "No reason provided";
         await member.kick(reason);
-        return await msg.channel.send(`\`${member.user.tag}\` (\`${member.user.id}\`) has been kicked.`);
+        await msg.channel.send(`\`${member.user.tag}\` (\`${member.user.id}\`) has been kicked.`);
+
+        // logging
+        const guildRecord = await GuildModel.findByPk(msg.guild.id);
+        if (!guildRecord) return;
+        const logsChannelId = guildRecord.getDataValue("channels_logs");
+        if (logsChannelId && guildRecord.getDataValue("logging_enabled")) {
+            const logChannel = await msg.guild.channels.fetch(logsChannelId);
+            if (logChannel && logChannel.isTextBased()) {
+                await logChannel.send(
+                    `\`${member.user.tag}\` (\`${member.id}\`) has been kicked by ${msg.author.tag} (\`${msg.author.id}\`) for \`${reason}\``
+                );
+            }
+        }
     }
 }

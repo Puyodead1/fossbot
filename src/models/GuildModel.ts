@@ -11,6 +11,7 @@ export const GuildSchema = object({
     automod_antispam_banDuration: number().default(2000),
     automod_antispam_cooldown: number().default(1_000),
     channels_logs: string().nullable(),
+    logging_enabled: boolean().default(false),
 });
 
 export type GuildAttributes = InferType<typeof GuildSchema>;

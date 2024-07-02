@@ -1,6 +1,7 @@
 import { Message } from "discord.js";
 import BaseClient from "../lib/BaseClient";
 import BaseCommand, { CommandPermissionLevel } from "../lib/BaseCommand";
+import GuildModel from "../models/GuildModel";
 
 export default class extends BaseCommand {
     constructor(public readonly client: BaseClient) {
@@ -29,6 +30,19 @@ export default class extends BaseCommand {
             reason,
             deleteMessageSeconds: 604800, // TODO: this doesnt do anything in spacebar yet
         });
-        return await msg.channel.send(`\`${member.user.tag}\` (\`${member.user.id}\`) has been banned.`);
+        await msg.channel.send(`\`${member.user.tag}\` (\`${member.user.id}\`) has been banned.`);
+
+        // logging
+        const guildRecord = await GuildModel.findByPk(msg.guild.id);
+        if (!guildRecord) return;
+        const logsChannelId = guildRecord.getDataValue("channels_logs");
+        if (logsChannelId && guildRecord.getDataValue("logging_enabled")) {
+            const logChannel = await msg.guild.channels.fetch(logsChannelId);
+            if (logChannel && logChannel.isTextBased()) {
+                await logChannel.send(
+                    `\`${member.user.tag}\` (\`${member.id}\`) has been banned by ${msg.author.tag} (\`${msg.author.id}\`) for \`${reason}\``
+                );
+            }
+        }
     }
 }
