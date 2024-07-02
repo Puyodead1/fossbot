@@ -6,7 +6,7 @@ export default class extends BaseEvent {
     constructor(public readonly client: BaseClient) {
         super({
             event: Events.Debug,
-            once: false,
+            once: true, // just disable
         });
     }
 
