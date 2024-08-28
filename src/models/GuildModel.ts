@@ -76,6 +76,12 @@ export default class Guild extends Model<GuildAttributes & { id: string }, Guild
         allowNull: true,
     })
     declare channels_logs: string | null;
+
+    @Column({
+        type: DataType.BOOLEAN,
+        defaultValue: false,
+    })
+    declare logging_enabled: boolean;
 }
 
 export const GuildSchemaKeys = Object.keys(GuildSchema.fields);
