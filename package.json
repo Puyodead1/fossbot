@@ -24,6 +24,6 @@
     "build": "tsc -p .",
     "start": "node dist",
     "clean": "rimraf dist",
-    "dev": "npm run build && npm run start"
+    "dev": "pnpm run build && pnpm run start"
   }
 }
