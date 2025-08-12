@@ -28,7 +28,8 @@
     },
     "pnpm": {
         "patchedDependencies": {
-            "@discordjs/ws": "patches/@discordjs__ws.patch"
+            "@discordjs/ws": "patches/@discordjs__ws.patch",
+            "discord.js": "patches/discord.js.patch"
         }
     }
 }

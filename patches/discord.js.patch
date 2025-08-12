@@ -1,0 +1,31 @@
+diff --git a/src/structures/Message.js b/src/structures/Message.js
+index 7aff0f65f093a356c5de2e2ffc4ef50a05be541d..daa7a0082ab6f3af4b8f3487182c42b884017f59 100644
+--- a/src/structures/Message.js
++++ b/src/structures/Message.js
+@@ -149,7 +149,7 @@ class Message extends Base {
+       this.embeds = this.embeds?.slice() ?? [];
+     }
+ 
+-    if ('components' in data) {
++    if ('components' in data && data.components != null) {
+       /**
+        * An array of components in the message.
+        * <info>This property requires the {@link GatewayIntentBits.MessageContent} privileged intent
+@@ -319,7 +319,7 @@ class Message extends Base {
+       this.applicationId ??= null;
+     }
+ 
+-    if ('activity' in data) {
++    if ('activity' in data && data.activity != null) {
+       /**
+        * Group activity
+        * @type {?MessageActivity}
+@@ -368,7 +368,7 @@ class Message extends Base {
+      * @property {MessageReferenceType} type The type of message reference
+      */
+ 
+-    if ('message_reference' in data) {
++    if ('message_reference' in data && data.message_reference != null) {
+       /**
+        * Message reference data
+        * @type {?MessageReference}

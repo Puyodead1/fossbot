@@ -8,6 +8,9 @@ patchedDependencies:
   '@discordjs/ws':
     hash: 252a2951ada6184dbbd30e7c3063ea1e5c98a18df70a9421b82a927d0dd59e27
     path: patches/@discordjs__ws.patch
+  discord.js:
+    hash: 27fcb9a95da21ea110ab0253b05e3e818600ceab48ed63f637a29d670fa76ddd
+    path: patches/discord.js.patch
 
 importers:
 
@@ -18,7 +21,7 @@ importers:
         version: 4.28.20
       discord.js:
         specifier: ^14.14.1
-        version: 14.21.0
+        version: 14.21.0(patch_hash=27fcb9a95da21ea110ab0253b05e3e818600ceab48ed63f637a29d670fa76ddd)
       dotenv:
         specifier: ^16.3.1
         version: 16.6.1
@@ -1200,7 +1203,7 @@ snapshots:
 
   discord-api-types@0.38.18: {}
 
-  discord.js@14.21.0:
+  discord.js@14.21.0(patch_hash=27fcb9a95da21ea110ab0253b05e3e818600ceab48ed63f637a29d670fa76ddd):
     dependencies:
       '@discordjs/builders': 1.11.3
       '@discordjs/collection': 1.5.3
