@@ -17,6 +17,7 @@ export default class extends BaseCommand {
     }
 
     public async execute(msg: Message, args: string[]): Promise<any> {
+        if (!msg.channel.isSendable()) return;
         const guildRecord = await GuildModel.findByPk(msg.guild!.id);
         if (!guildRecord) return await msg.channel.send("No guild record was found.");
 
@@ -25,10 +26,7 @@ export default class extends BaseCommand {
 
         if (subcmd === "get") {
             const key = args.shift();
-            if (!key)
-                return await msg.channel.send(
-                    `No config key provided. Valid keys: \`${GuildSchemaKeys.join("`, `")}\``
-                );
+            if (!key) return await msg.channel.send(`No config key provided. Valid keys: \`${GuildSchemaKeys.join("`, `")}\``);
             // check if key is valid
             if (!GuildSchemaKeys.includes(key)) return await msg.channel.send("invalid key");
 
@@ -36,10 +34,7 @@ export default class extends BaseCommand {
             return await msg.channel.send(`\`${key}\` = \`${value}\``);
         } else if (subcmd === "set") {
             const key = args.shift();
-            if (!key)
-                return await msg.channel.send(
-                    `No config key provided. Valid keys: \`${GuildSchemaKeys.join("`, `")}\``
-                );
+            if (!key) return await msg.channel.send(`No config key provided. Valid keys: \`${GuildSchemaKeys.join("`, `")}\``);
             // check if key is valid
             if (!GuildSchemaKeys.includes(key)) return await msg.channel.send("invalid key");
             const value = args.join(" ");

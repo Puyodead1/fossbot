@@ -13,6 +13,7 @@ export default class extends BaseCommand {
         });
     }
     public async execute(msg: Message, args: string[]): Promise<any> {
+        if (!msg.channel.isSendable()) return;
         const channelId = args.length ? args[0] : msg.channel.id;
         const channel = await msg.guild?.channels.fetch(channelId);
         if (!channel || !("permissionOverwrites" in channel)) return await msg.channel.send("Invalid channel.");
@@ -23,14 +24,10 @@ export default class extends BaseCommand {
             await channel.permissionOverwrites.create(msg.guild!.roles.everyone, { SendMessages: false });
         } else {
             if (perms.deny.has("SendMessages")) {
-                const embed = new EmbedBuilder()
-                    .setDescription(`🤔 Channel is already locked`)
-                    .setColor("Red")
-                    .setTimestamp()
-                    .setFooter({
-                        text: msg.author.tag,
-                        iconURL: msg.author.displayAvatarURL(),
-                    });
+                const embed = new EmbedBuilder().setDescription(`🤔 Channel is already locked`).setColor("Red").setTimestamp().setFooter({
+                    text: msg.author.tag,
+                    iconURL: msg.author.displayAvatarURL(),
+                });
                 return await msg.channel.send({
                     embeds: [embed],
                 });
@@ -38,14 +35,10 @@ export default class extends BaseCommand {
             await channel.permissionOverwrites.edit(msg.guild!.roles.everyone, { SendMessages: false });
         }
 
-        const embed = new EmbedBuilder()
-            .setDescription(`🔒 Locked channel <#${channel.id}>`)
-            .setColor("Red")
-            .setTimestamp()
-            .setFooter({
-                text: msg.author.tag,
-                iconURL: msg.author.displayAvatarURL(),
-            });
+        const embed = new EmbedBuilder().setDescription(`🔒 Locked channel <#${channel.id}>`).setColor("Red").setTimestamp().setFooter({
+            text: msg.author.tag,
+            iconURL: msg.author.displayAvatarURL(),
+        });
         return await msg.channel.send({
             embeds: [embed],
         });

@@ -12,6 +12,7 @@ export default class extends BaseCommand {
         });
     }
     public async execute(msg: Message): Promise<any> {
+        if (!msg.channel.isSendable()) return;
         // prints all roles in the guild
         if (!msg.guild) return await msg.channel.send("Guild not found");
         if (!msg.guild.roles) return await msg.channel.send("No roles found");

@@ -14,12 +14,12 @@ export default class extends BaseCommand {
     }
 
     public async execute(msg: Message, args: string[]): Promise<any> {
+        if (!msg.channel.isSendable()) return;
         if (args.length < 1) return await msg.channel.send("Usage: unmute <user>");
         const member = await msg.guild!.members.fetch(args[0]);
         if (!member) return await msg.channel.send("Invalid member.");
         // check if the bot has permission to manage roles
-        if (!msg.guild?.members.me?.permissions.has("ManageRoles"))
-            return await msg.channel.send("I am missing permission to manage roles.");
+        if (!msg.guild?.members.me?.permissions.has("ManageRoles")) return await msg.channel.send("I am missing permission to manage roles.");
         // check if the bot can manage the user
         if (!member.manageable) return await msg.channel.send("I cannot manage this user.");
 

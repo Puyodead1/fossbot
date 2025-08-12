@@ -13,14 +13,14 @@ export default class extends BaseCommand {
         });
     }
     public async execute(msg: Message, args: string[]): Promise<any> {
+        if (!msg.channel.isSendable()) return;
         if (args.length < 2) return await msg.channel.send("Usage: createchannel <name> <type> [position] [parent]");
         const name = args[0];
         let type: GuildChannelTypes | string = args[1];
         const position = args[2] ? Number(args[2]) : undefined;
         const parent = args[3] ? msg.guild!.channels.cache.get(args[3]) : undefined;
 
-        if (parent !== undefined && parent.type !== ChannelType.GuildCategory)
-            return await msg.channel.send("Invalid parent channel.");
+        if (parent !== undefined && parent.type !== ChannelType.GuildCategory) return await msg.channel.send("Invalid parent channel.");
 
         // if type is a string, try and convert it to a number
         if (typeof type === "string") {

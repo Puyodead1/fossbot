@@ -32,6 +32,7 @@ export default class extends BaseCommand {
     }
 
     public async execute(msg: Message): Promise<any> {
+        if (!msg.channel.isSendable()) return;
         const commit = await this.getCommit();
         const branch = await this.getBranch();
 

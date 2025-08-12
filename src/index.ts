@@ -18,6 +18,9 @@ const client = new BaseClient({
     config: {
         prefix: process.env.PREFIX,
     },
+    ws: {
+        version: 9,
+    },
 });
 
 const eventsPath = path.join(__dirname, "events");
@@ -30,8 +33,7 @@ for (const file of eventFiles) {
     const filePath = path.join(eventsPath, file);
     const event: new <T extends BaseEvent>(client: BaseClient) => T = require(filePath).default;
     const eventInstance = new event(client);
-    if (eventInstance.options.once)
-        client.once(eventInstance.options.event, (...args) => eventInstance.execute(...args));
+    if (eventInstance.options.once) client.once(eventInstance.options.event, (...args) => eventInstance.execute(...args));
     else client.on(eventInstance.options.event, (...args) => eventInstance.execute(...args));
     console.log(`[Event Load] Loaded event ${eventInstance.options.event}!`);
 }

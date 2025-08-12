@@ -12,6 +12,7 @@ export default class extends BaseCommand {
         });
     }
     public async execute(msg: Message, args: string[]): Promise<any> {
+        if (!msg.channel.isSendable()) return;
         if (!args.length) return await msg.channel.send("role <add|remove> <member> <role>");
 
         const action = args[0];
@@ -26,6 +27,7 @@ export default class extends BaseCommand {
     }
 
     async add(msg: Message, args: string[]): Promise<any> {
+        if (!msg.channel.isSendable()) return;
         if (args.length < 2) return await msg.channel.send("role add <member> <role>");
         const mid = args[0];
         const rid = args[1];
@@ -45,6 +47,7 @@ export default class extends BaseCommand {
     }
 
     async remove(msg: Message, args: string[]): Promise<any> {
+        if (!msg.channel.isSendable()) return;
         if (args.length < 2) return await msg.channel.send("role remove <member> <role>");
         const mid = args[0];
         const rid = args[1];

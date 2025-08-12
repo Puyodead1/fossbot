@@ -10,6 +10,7 @@ export default class AntiSpam {
 
     public async execute(msg: Message, guildSettings: GuildModel): Promise<any> {
         if (!msg.guild) return;
+        if (!msg.channel.isSendable()) return;
         let member = await msg.guild.members.fetch(msg.author.id);
         // TODO: whitelist checks
 
@@ -53,12 +54,8 @@ export default class AntiSpam {
             if (duration <= warnDuration) {
                 // warn
                 this.spamWarnCache.add(msg.author.id);
-                console.log(
-                    `[AntiSpam] ${msg.author.tag} (${msg.author.id}) has been warned for spamming (${cached.length} messages in ${duration}ms)`
-                );
-                await msg.channel
-                    .send(`${msg.author}, stop spamming. Further spam will result in an automatic ban.`)
-                    .then((m) => setTimeout(() => m.delete(), 5_000));
+                console.log(`[AntiSpam] ${msg.author.tag} (${msg.author.id}) has been warned for spamming (${cached.length} messages in ${duration}ms)`);
+                await msg.channel.send(`${msg.author}, stop spamming. Further spam will result in an automatic ban.`).then((m) => setTimeout(() => m.delete(), 5_000));
                 return;
             }
         }
@@ -75,14 +72,10 @@ export default class AntiSpam {
             if (duration <= banDuration) {
                 // ban
                 this.trapCache.add(msg.author.id); // temporarily add to cache so we dont trigger multiple times
-                console.log(
-                    `[AntiSpam] ${msg.author.tag} (${msg.author.id}) has been banned for spamming (${cached.length} messages in ${duration}ms)`
-                );
+                console.log(`[AntiSpam] ${msg.author.tag} (${msg.author.id}) has been banned for spamming (${cached.length} messages in ${duration}ms)`);
 
                 await member.ban({ reason: "Spam" });
-                await msg.channel
-                    .send(`${msg.author} has been banned for spamming.`)
-                    .then((m) => setTimeout(() => m.delete(), 5_000));
+                await msg.channel.send(`${msg.author} has been banned for spamming.`).then((m) => setTimeout(() => m.delete(), 5_000));
                 // clear
                 await this.purge(cached, msg);
                 this.cooldownCache.delete(msg.author.id);
@@ -93,9 +86,7 @@ export default class AntiSpam {
                 if (logsChannelId) {
                     const logChannel = await msg.guild.channels.fetch(logsChannelId);
                     if (logChannel && logChannel.isTextBased()) {
-                        await logChannel.send(
-                            `\`${msg.author.tag}\` (\`${msg.author.id}\`) has been banned for spamming (\`${cached.length}\` messages in \`${duration}ms\`)`
-                        );
+                        await logChannel.send(`\`${msg.author.tag}\` (\`${msg.author.id}\`) has been banned for spamming (\`${cached.length}\` messages in \`${duration}ms\`)`);
                     }
                 }
                 return;

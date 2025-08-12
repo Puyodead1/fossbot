@@ -15,13 +15,13 @@ export default class extends BaseCommand {
     }
 
     public async execute(msg: Message, args: string[]): Promise<any> {
+        if (!msg.channel.isSendable()) return;
         if (args.length < 1) return await msg.channel.send("Usage: unban <user> [reason]");
         const member = await msg.guild!.members.fetch(args[0]);
         if (!member) return await msg.channel.send("Invalid member.");
 
         // check if the bot has permission to unban users
-        if (!msg.guild?.members.me?.permissions.has("BanMembers"))
-            return await msg.channel.send("I am missing permission to unban members.");
+        if (!msg.guild?.members.me?.permissions.has("BanMembers")) return await msg.channel.send("I am missing permission to unban members.");
 
         // find the ban
         const ban = await msg.guild!.bans.fetch(member.user);
@@ -38,9 +38,7 @@ export default class extends BaseCommand {
         if (logsChannelId && guildRecord.getDataValue("logging_enabled")) {
             const logChannel = await msg.guild.channels.fetch(logsChannelId);
             if (logChannel && logChannel.isTextBased()) {
-                await logChannel.send(
-                    `\`${member.user.tag}\` (\`${member.id}\`) has been unbanned by ${msg.author.tag} (\`${msg.author.id}\`)`
-                );
+                await logChannel.send(`\`${member.user.tag}\` (\`${member.id}\`) has been unbanned by ${msg.author.tag} (\`${msg.author.id}\`)`);
             }
         }
     }

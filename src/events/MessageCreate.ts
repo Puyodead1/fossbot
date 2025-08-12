@@ -16,6 +16,7 @@ export default class extends BaseEvent {
         if (msg.author.bot) return; // ignore bots
         if (!msg.content) return;
         if (!msg.guild) return; // ignore DMs
+        if (!msg.channel.isSendable()) return;
         if (msg.author.id === this.client.user?.id) return; // ignore self
         const guildRecord = await GuildModel.findByPk(msg.guild.id);
         const prefix = guildRecord?.getDataValue("prefix") ?? this.client.config.prefix!;

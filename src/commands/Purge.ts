@@ -11,6 +11,7 @@ export default class extends BaseCommand {
         });
     }
     public async execute(msg: Message, args: string[]): Promise<any> {
+        if (!msg.channel.isSendable()) return;
         if (!msg.channel.isTextBased()) return;
         if (!args.length) return await msg.channel.send("purge <user|count> [args]");
         const action = args[0]; // user, count, all
@@ -26,6 +27,7 @@ export default class extends BaseCommand {
     }
 
     async purgeUser(msg: Message, args: string[]): Promise<any> {
+        if (!msg.channel.isSendable()) return;
         const m = await msg.channel.send("Working on it...");
 
         const id = args[0];
@@ -63,12 +65,11 @@ export default class extends BaseCommand {
             await message.delete();
         }
 
-        await m
-            .edit(`Deleted ${messages.length} messages from ${user.tag}`)
-            .then((m) => setTimeout(() => m.delete(), 5_000));
+        await m.edit(`Deleted ${messages.length} messages from ${user.tag}`).then((m) => setTimeout(() => m.delete(), 5_000));
     }
 
     async purgeCount(msg: Message, args: string[]): Promise<any> {
+        if (!msg.channel.isSendable()) return;
         const m = await msg.channel.send("Working on it...");
 
         if (!args.length) return await m.edit("Amount not specified");

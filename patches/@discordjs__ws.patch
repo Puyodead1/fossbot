@@ -1,0 +1,16 @@
+diff --git a/dist/index.js b/dist/index.js
+index 106b2ec450a248cd5bd7c36c038215145438eade..f77a775ff1ddac4b0ca54e4e53ef02fc0c81160b 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -675,7 +675,10 @@ var WebSocketShard = class extends import_async_event_emitter.AsyncEventEmitter
+     const url = `${session?.resumeURL ?? this.strategy.options.gatewayInformation.url}?${params.toString()}`;
+     this.debug([`Connecting to ${url}`]);
+     const connection = new WebSocketConstructor(url, [], {
+-      handshakeTimeout: this.strategy.options.handshakeTimeout ?? void 0
++      handshakeTimeout: this.strategy.options.handshakeTimeout ?? void 0,
++      headers: {
++        "user-agent": "@discordjs/ws 1.2.3",
++      }
+     });
+     connection.binaryType = "arraybuffer";
+     connection.onmessage = (event) => {
