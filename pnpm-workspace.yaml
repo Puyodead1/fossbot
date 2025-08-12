@@ -2,4 +2,4 @@ onlyBuiltDependencies:
   - sqlite3
 
 patchedDependencies:
-  '@discordjs/ws': patches/@discordjs__ws.patch
+  "@discordjs/ws": patches/@discordjs__ws.patch
